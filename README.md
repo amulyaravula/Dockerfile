@@ -12,7 +12,7 @@
 
 4. EXPOSE -  tells docker that the container listens on the specified network ports at runtime. 
 
-5. CMD    - specifies the command that runs when conatiner starts
+5. CMD    - specifies the command that runs when container starts
 
 ### Build image
 
