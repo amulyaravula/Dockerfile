@@ -4,8 +4,6 @@
    
    - FROM- Specifies the base image
    
-   - quay.io- third party registry
-
 2. RUN - execute build commands
 
 3. ENV - set the environment variables
