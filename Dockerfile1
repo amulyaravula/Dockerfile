@@ -22,8 +22,7 @@ RUN yum install -y epel-release  yum-utils && \
 # Install PHP
 RUN yum --enablerepo=remi-php73  -y install php php-bcmath php-cli php-common php-gd php-intl php-ldap php-mbstring \
     php-mysqlnd mod_php php-pear php-soap php-devel  php-xml php-xmlrpc php-zip
-
--   
+   
 
 #install redis
 RUN yum -y install redis
@@ -34,7 +33,7 @@ RUN yum -y install librdkafka librdkafka-devel && \
    echo "extension=rdkafka.so" > /etc/php.d/rdkafka.ini
 
 
-RUN echo "<?php phpinfo(); ?>" >  /var/www/html/info.php 
+RUN echo "<?php phpinfo(); ?>" >  /usr/local/apache2/htdocs/info.php 
 
 EXPOSE 80
 
