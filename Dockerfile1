@@ -1,0 +1,41 @@
+FROM centos:7
+
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-* && \
+    sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+
+RUN yum install  -y wget gcc make pcre-devel openssl-devel  \
+   apr-devel apr-util-devel 
+  
+
+RUN wget https://dlcdn.apache.org/httpd/httpd-2.4.63.tar.gz && \
+         mkdir /opt/httpd && \
+        tar -zxf httpd-2.4.63.tar.gz -C /opt/httpd   --strip-components=1 && \
+        cd /opt/httpd && \
+       ./configure    && \
+       make && make install
+# Install EPEL Repo
+RUN yum install -y epel-release  yum-utils && \
+   yum  -y install http://rpms.remirepo.net/enterprise/remi-release-7.rpm
+
+
+ 
+# Install PHP
+RUN yum --enablerepo=remi-php73  -y install php php-bcmath php-cli php-common php-gd php-intl php-ldap php-mbstring \
+    php-mysqlnd mod_php php-pear php-soap php-devel  php-xml php-xmlrpc php-zip
+
+-   
+
+#install redis
+RUN yum -y install redis
+
+#install kafka
+RUN yum -y install librdkafka librdkafka-devel && \
+  pecl install rdkafka && \
+   echo "extension=rdkafka.so" > /etc/php.d/rdkafka.ini
+
+
+RUN echo "<?php phpinfo(); ?>" >  /var/www/html/info.php 
+
+EXPOSE 80
+
+CMD ["/usr/local/apache2/bin/httpd", "-D" , "FOREGROUND"]
