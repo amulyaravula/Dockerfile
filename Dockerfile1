@@ -35,6 +35,20 @@ RUN yum -y install librdkafka librdkafka-devel && \
 
 RUN echo "<?php phpinfo(); ?>" >  /usr/local/apache2/htdocs/info.php 
 
+# Configure Apache to use PHP and listen on port 8082
+RUN echo "Listen 8082" > /usr/local/apache2/conf/httpd.conf && \
+    echo "ServerName localhost" >> /usr/local/apache2/conf/httpd.conf && \
+    echo "LoadModule php7_module modules/libphp7.so" >> /usr/local/apache2/conf/httpd.conf && \
+    echo "AddHandler php7-script .php" >> /usr/local/apache2/conf/httpd.conf && \
+    echo "DirectoryIndex index.php index.html" >> /usr/local/apache2/conf/httpd.conf && \
+    echo "DocumentRoot \"/usr/local/apache2/htdocs\"" >> /usr/local/apache2/conf/httpd.conf && \
+    echo "<Directory \"/usr/local/apache2/htdocs\">" >> /usr/local/apache2/conf/httpd.conf && \
+    echo "    AllowOverride All" >> /usr/local/apache2/conf/httpd.conf && \
+    echo "    Require all granted" >> /usr/local/apache2/conf/httpd.conf && \
+    echo "</Directory>" >> /usr/local/apache2/conf/httpd.conf && \
+    echo "Include conf/extra/httpd-default.conf" >> /usr/local/apache2/conf/httpd.conf
+
+
 EXPOSE 80
 
 CMD ["/usr/local/apache2/bin/httpd", "-D" , "FOREGROUND"]
